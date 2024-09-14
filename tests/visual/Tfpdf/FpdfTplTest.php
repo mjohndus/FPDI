@@ -16,8 +16,8 @@ class FpdfTplTest extends \setasign\Fpdi\visual\FpdfTplTest
         return __FILE__;
     }
 
-    public function getInstance()
+    public function getInstance($unit = 'pt')
     {
-        return new FpdfTpl('P', 'pt');
+        return new FpdfTpl('P', $unit);
     }
 }
