@@ -612,4 +612,13 @@ class CrossReferenceTest extends TestCase
         $this->expectExceptionCode(CrossReferenceException::INVALID_DATA);
         new CrossReference($parser);
     }
+
+    public function testBehaviorWithSameOffsets()
+    {
+        $stream = StreamReader::createByFile(__DIR__ . '/../../../_files/pdfs/specials/xref_prev_loop.pdf');
+        $parser = new PdfParser($stream);
+        $this->expectException(CrossReferenceException::class);
+        $this->expectExceptionCode(CrossReferenceException::CYCLIC_STRUCTURE);
+        new CrossReference($parser);
+    }
 }

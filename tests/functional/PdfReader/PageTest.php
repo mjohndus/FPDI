@@ -4,6 +4,7 @@ namespace setasign\Fpdi\functional\PdfReader;
 
 use PHPUnit\Framework\TestCase;
 use setasign\Fpdi\PdfParser\PdfParser;
+use setasign\Fpdi\PdfParser\PdfParserException;
 use setasign\Fpdi\PdfParser\StreamReader;
 use setasign\Fpdi\PdfReader\DataStructure\Rectangle;
 use setasign\Fpdi\PdfReader\PdfReader;
@@ -133,5 +134,18 @@ class PageTest extends TestCase
                 }
             }
         }
+    }
+
+    public function testGetAttributeWithRecursion()
+    {
+        $stream = StreamReader::createByFile(__DIR__ . '/../../_files/pdfs/specials/page_parent_loop.pdf');
+        $parser = new PdfParser($stream);
+
+        $pdfReader = new PdfReader($parser);
+        $page = $pdfReader->getPage(1);
+
+        $this->expectException(PdfParserException::class);
+        $this->expectExceptionMessage('Indirect reference recursion detected (4).');
+        $page->getAttribute('Rotate');
     }
 }
